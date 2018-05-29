@@ -1,6 +1,4 @@
-# react-redux-webpack-bootstrap-mongo-universal-webpack-too
+# bootstrap-redux-react-loadable-webpack-dllplugin
 
 ### Overview:
-Version of repo 'react-redux-webpack-bootstrap-mongo-universal-webpack' without using 'Bootstrap-Loader'.
-
-
+App is a continuation of repo 'react-redux-webpack-bootstrap-mongo-universal-webpack'.
