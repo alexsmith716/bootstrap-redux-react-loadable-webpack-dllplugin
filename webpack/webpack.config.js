@@ -23,7 +23,7 @@ module.exports = {
     publicPath: '/assets/',
     // chunkFilename: '[name].[hash].js'
     // chunkFilename: '[name].[chunkhash].js',
-    filename: '[name]-[hash].js',
+    // filename: '[name]-[hash].js',
     // filename: '[name]-[chunkhash].js',
     chunkFilename: '[name]-[chunkhash].chunk.js',
   },

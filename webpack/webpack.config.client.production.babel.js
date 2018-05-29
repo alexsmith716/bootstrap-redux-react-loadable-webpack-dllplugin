@@ -7,7 +7,7 @@ const Visualizer = require('webpack-visualizer-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const { clientConfiguration } = require('universal-webpack');
 
-const ReactLoadablePlugin = require('react-loadable/webpack').ReactLoadablePlugin;
+// const ReactLoadablePlugin = require('react-loadable/webpack').ReactLoadablePlugin;
 
 const settings = require('./universal-webpack-settings');
 const base_configuration = require('./webpack.config');
@@ -57,7 +57,7 @@ configuration.plugins.push(
     // exclude: ,  // {RegExp|Array<RegExp>}  undefined   Files to exclude
     cache: false,      // Enable file caching (default: false)
     parallel: true,   // Use multi-process parallel running to improve the build speed (default: false)
-    sourceMap: false, // Use source maps to map error message locations to modules (default: false)
+    sourceMap: true, // Use source maps to map error message locations to modules (default: false)
     extractComments: false, // Whether comments shall be extracted to a separate file (default: false)
     uglifyOptions: {
       ecma: 8, // Supported ECMAScript Version (default undefined)
@@ -81,9 +81,9 @@ configuration.plugins.push(
     canPrint: true, // indicating if the plugin can print messages to the console (default true)
   }),
 
-  new ReactLoadablePlugin({
-    filename: path.join(buildPath, 'loadable-chunks.json')
-  }),
+  // new ReactLoadablePlugin({
+  //   filename: path.join(buildPath, 'loadable-chunks.json')
+  // }),
 
   // https://blog.etleap.com/2017/02/02/inspecting-your-webpack-bundle/
   new Visualizer({

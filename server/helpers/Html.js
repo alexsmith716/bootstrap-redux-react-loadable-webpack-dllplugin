@@ -93,6 +93,9 @@ const Html = props => {
           ></script>
         )}
 
+        {__DLLS__ === true && console.log(">>>>>>>>>>>>>>> YES __DLLS__ <<<<<<<<<<<<<<<<<<")}
+        {__DLLS__ !== true && console.log(">>>>>>>>>>>>>>> NO __DLLS__ <<<<<<<<<<<<<<<<<<")}
+
         {__DLLS__ && <script key="dlls__vendor" src="/assets/dlls/dll__vendor.js" charSet="UTF-8" />}
 
         {/* (>>>>>>> JAVASCRIPTS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<) */}

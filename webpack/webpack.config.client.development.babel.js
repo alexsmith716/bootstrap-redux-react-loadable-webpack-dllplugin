@@ -34,7 +34,7 @@ configuration.mode = 'development';
 // configuration.devtool = 'source-map';
 configuration.devtool = 'inline-source-map';
 
-// configuration.output.filename = '[name]-[hash].js';
+configuration.output.filename = '[name]-[hash].js';
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // PLUGINS +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

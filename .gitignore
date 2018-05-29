@@ -13,6 +13,7 @@ dist/
 build/analyzers
 build/public/assets
 build/server
+webpack/dlls
 coverage
 gh-pages/
 bin/*.json
