@@ -22,6 +22,7 @@ module.exports = {
 
   entry: {
     vendor: [
+      'babel-polyfill',
       // Generate this list using the following command against the stdout of
       // webpack running against the source bundle config (dev/prod.js):
       //
@@ -63,9 +64,9 @@ module.exports = {
       'jquery',
       'popper.js',
       'bootstrap',
-      'babel-polyfill',
       'axios',
       'final-form',
+      'multireducer',
       'react',
       'react-dom',
       'react-final-form',

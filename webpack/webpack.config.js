@@ -6,15 +6,11 @@ const rootPath = path.resolve(__dirname, '..');
 module.exports = {
 
   context: rootPath,
+
   entry: {
     main: [
-      './client/assets/scss/theme/theme.scss',
+      'bootstrap-loader',
       './client/index.entry.js',
-    ],
-    vendor: [
-      'jquery',
-      'popper.js',
-      'bootstrap',
     ],
   },
 
@@ -85,53 +81,19 @@ module.exports = {
       },
       {
         test: /\.(scss)$/,
-        include: [ path.resolve(rootPath, 'client/assets/scss') ],
         use: [
           {
-            loader: 'style-loader'
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              sourceMap: true
-            }
-          },
-          {
-            loader: 'postcss-loader',
-            options: {
-              sourceMap: true,
-              // config: {
-              //   path: 'postcss.config.js',
-              // },
-            }
-          },
-          {
-            loader: 'resolve-url-loader',
-            options: {
-              sourceMap: true
-            }
-          },
-          {
-            loader: 'sass-loader',
-            options: {
-              outputStyle: 'expanded',
-              sourceMap: true,
-              sourceMapContents: true
-            }
-          },
-        ]
-      },
-      {
-        test: /\.(scss)$/,
-        exclude: [ path.resolve(rootPath, 'client/assets/scss') ],
-        use: [
-          {
-            loader: 'style-loader'
+            loader: 'style-loader',
+            // options: {
+            //   sourceMap: true,
+            // }
           },
           {
             loader: 'css-loader',
             options: {
               modules: true,
+              importLoaders: 2,
+              sourceMap: true,
               localIdentName: '[name]__[local]__[hash:base64:5]',
             }
           },
@@ -147,7 +109,9 @@ module.exports = {
           {
             loader: 'sass-loader',
             options: {
+              outputStyle: 'expanded',
               sourceMap: true,
+              // sourceMapContents: true
             }
           },
           {
@@ -202,36 +166,36 @@ module.exports = {
           },
         ]
       },
-      {
-        test: '/popper.js/',
-        use: [
-          {
-            loader: 'expose-loader',
-            options: 'Popper',
-          },
-        ]
-      },
-      {
-        test: '/jquery/',
-        use: [
-          {
-            loader: 'expose-loader',
-            options: '$',
-          },
-          {
-            loader: 'expose-loader',
-            options: 'jQuery',
-          },
-          {
-            loader: 'expose-loader',
-            options: 'jquery',
-          },
-        ]
-      },
     ]
   },
+
   resolve: {
+    modules: [
+      'client',
+      'node_modules'
+    ],
     extensions: ['.js', '.jsx', '.json',],
   },
-  plugins: []
-}
+
+  plugins: [
+
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      jquery: 'jquery',
+      Popper: ['popper.js', 'default'],
+      Alert: "exports-loader?Alert!bootstrap/js/dist/alert",
+      Button: "exports-loader?Button!bootstrap/js/dist/button",
+      Carousel: "exports-loader?Carousel!bootstrap/js/dist/carousel",
+      Collapse: "exports-loader?Collapse!bootstrap/js/dist/collapse",
+      Dropdown: "exports-loader?Dropdown!bootstrap/js/dist/dropdown",
+      Modal: "exports-loader?Modal!bootstrap/js/dist/modal",
+      Popover: "exports-loader?Popover!bootstrap/js/dist/popover",
+      Scrollspy: "exports-loader?Scrollspy!bootstrap/js/dist/scrollspy",
+      Tab: "exports-loader?Tab!bootstrap/js/dist/tab",
+      Tooltip: "exports-loader?Tooltip!bootstrap/js/dist/tooltip",
+      Util: "exports-loader?Util!bootstrap/js/dist/util",
+    }),
+
+  ],
+};
