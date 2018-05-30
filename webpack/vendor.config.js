@@ -2,6 +2,10 @@ var path = require('path');
 var webpack = require('webpack');
 var projectRootPath = path.resolve(__dirname, '../');
 
+  // 'expose-loader?$!jquery',
+  // 'expose-loader?jQuery!jquery',
+  // 'expose-loader?Popper!popper.js',
+
 module.exports = {
   mode: 'development',
   devtool: 'inline-source-map',
@@ -18,8 +22,6 @@ module.exports = {
 
   entry: {
     vendor: [
-      'babel-polyfill',
-
       // Generate this list using the following command against the stdout of
       // webpack running against the source bundle config (dev/prod.js):
       //
@@ -58,11 +60,12 @@ module.exports = {
       'babel-runtime/regenerator/index',
       // </babel-runtime>
 
-      'axios',
-      'bootstrap',
-      'final-form',
       'jquery',
       'popper.js',
+      'bootstrap',
+      'babel-polyfill',
+      'axios',
+      'final-form',
       'react',
       'react-dom',
       'react-final-form',
@@ -75,7 +78,6 @@ module.exports = {
       'serialize-javascript',
     ]
   },
-
   plugins: [
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),

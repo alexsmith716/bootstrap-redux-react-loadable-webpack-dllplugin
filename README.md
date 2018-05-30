@@ -10,6 +10,8 @@ App is a continuation of repo 'react-redux-webpack-bootstrap-mongo-universal-web
 
 The DllPlugin and DllReferencePlugin provide means to split bundles in a way that can drastically improve build time performance.
 
+Use the DllPlugin to move code that is changed less often into a separate compilation. This will improve the application's compilation speed.
+
 
 #### DllPlugin (./webpack/vendor.config.js):
 
@@ -22,7 +24,7 @@ Combine this plugin with output.library option to expose (aka, put into the glob
 
 #### DllReferencePlugin (./webpack/helpers.js):
 
-This plugin is used in the primary webpack config, it references the dll-only-bundle(s) to require pre-built dependencies.
+This plugin is used in the primary webpack config (./webpack/helpers.js) >>> (./webpack/dev.config.js), it references the dll-only-bundle(s) to require pre-built dependencies.
 
 References a dll manifest file to map dependency names to module ids, then requires them as needed using the internal __webpack_require__ function.
 
