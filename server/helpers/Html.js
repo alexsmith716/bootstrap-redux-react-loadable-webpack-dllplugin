@@ -15,6 +15,8 @@ const Html = props => {
   console.log('>>>>>> HTML.JS > assets.styles: ', assets.styles);
   console.log('>>>>>> HTML.JS > assets: ', assets);
 
+  // SERVER OUTPUT BEFORE USING webpack.DllPlugin:
+
   // DEVELOPMENT -----------------------------------------------------------------------------------------
   // >>>>>> HTML.JS > Object.keys(assets.styles):  []
   // >>>>>> HTML.JS > Object.keys(assets.styles).length:  0
@@ -38,7 +40,26 @@ const Html = props => {
   //      vendor: '/assets/vendor.423863f32e02f2f88f2a.js',
   //      main: '/assets/main.423863f32e02f2f88f2a.js' },
   //   styles: { main: '/assets/main-741466ca48ed79dc2012.css' } }
-  
+
+
+  // SERVER OUTPUT AFTER USING webpack.DllPlugin:
+
+  // DEVELOPMENT -----------------------------------------------------------------------------------------
+  // >>>>>> HTML.JS > Object.keys(assets.styles):  []
+  // >>>>>> HTML.JS > Object.keys(assets.styles).length:  0
+  // >>>>>> HTML.JS > assets.styles:  {}
+  // >>>>>> HTML.JS > assets:  { javascript:
+  //    { main: 'http://localhost:3001/assets/main-6ba432e5e33da3b51af6.js' },
+  //   styles: {} }
+
+  // PRODUCTION -------------------------------------------------------------------------------------------
+  // >>>>>> HTML.JS > Object.keys(assets.styles):  [ 'main' ]
+  // >>>>>> HTML.JS > Object.keys(assets.styles).length:  1
+  // >>>>>> HTML.JS > assets.styles:  { main: '/assets/main-124723e1e8bf11ebfacc.css' }
+  // >>>>>> HTML.JS > assets:  { javascript: { main: '/assets/main-a4447c0b9b4a53981db2.js' },
+  //   styles: { main: '/assets/main-124723e1e8bf11ebfacc.css' } }
+
+
   return (
 
     <html lang="en-US">

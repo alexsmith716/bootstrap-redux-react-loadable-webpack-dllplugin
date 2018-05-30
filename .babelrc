@@ -15,7 +15,6 @@
     "add-module-exports",
     "transform-decorators-legacy",
     "transform-class-properties",
-    "react-loadable/babel",
     "react-hot-loader/babel",
   ],
 }
