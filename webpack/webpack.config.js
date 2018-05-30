@@ -73,8 +73,6 @@ module.exports = {
 
   module: {
 
-    strictThisContextOnImports: true,
-
     rules: [
       {
         test: /\.jsx?$/,
