@@ -57,7 +57,7 @@ console.log('>>>>>>>>>>>>>>>>>>>>>>>> CLIENT.JS > __DEVTOOLS__ !!!!!: ', __DEVTO
     );
   };
 
-  // await Loadable.preloadReady();
+  await Loadable.preloadReady();
 
   hydrate(routes);
 
