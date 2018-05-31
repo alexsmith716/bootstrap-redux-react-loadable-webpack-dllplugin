@@ -8,7 +8,7 @@ const { clientConfiguration } = require('universal-webpack');
 
 const rootPath = path.resolve(__dirname, '..');
 
-// const ReactLoadablePlugin = require('react-loadable/webpack').ReactLoadablePlugin;
+const ReactLoadablePlugin = require('react-loadable/webpack').ReactLoadablePlugin;
 
 // With `development: false` all CSS will be extracted into a file
 // named '[name]-[contenthash].css' using `mini-css-extract-plugin`.
@@ -56,9 +56,9 @@ configuration.plugins.push(
   // // Webpack Hot Reload
   // new webpack.HotModuleReplacementPlugin(),
 
-  // new ReactLoadablePlugin({
-  //   filename: path.join(configuration.output.publicPath, 'loadable-chunks.json')
-  // }),
+  new ReactLoadablePlugin({
+    filename: path.join(configuration.output.path, 'loadable-chunks.json')
+  }),
 
   new webpack.NamedModulesPlugin(),
 
