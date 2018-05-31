@@ -3,13 +3,13 @@ import { connectedRouterRedirect } from 'redux-auth-wrapper/history4/redirect';
 import locationHelperBuilder from 'redux-auth-wrapper/history4/locationHelper';
 import { App, Home, NotFound } from '../containers';
 
-import Login from '../containers/Login/Login';
-import Register from '../containers/Register/Register';
-import About from '../containers/About/About';
+// import Login from '../containers/Login/Login';
+// import Register from '../containers/Register/Register';
+// import About from '../containers/About/About';
 
-// import About from '../containers/About/Loadable';
-// import Login from '../containers/Login/Loadable';
-// import Register from '../containers/Register/Loadable';
+import About from '../containers/About/Loadable';
+import Login from '../containers/Login/Loadable';
+import Register from '../containers/Register/Loadable';
 // import LoginSuccess from 'containers/LoginSuccess/Loadable';
 
 const locationHelper = locationHelperBuilder({});

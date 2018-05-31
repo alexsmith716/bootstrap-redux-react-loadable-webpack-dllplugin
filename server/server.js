@@ -266,13 +266,16 @@ export default function (parameters) {
       console.log('>>>>>>>>>>>>>>>>> SERVER > $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ loadOnServer END $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
   
       const context = {};
+      const modules = [];
   
       const component = (
-        <Provider store={store} key="provider">
-          <StaticRouter location={url} context={context}>
-            <ReduxAsyncConnect routes={routes} helpers={{ client }} />
-          </StaticRouter>
-        </Provider>
+        <Loadable.Capture report={moduleName => modules.push(moduleName)}>
+          <Provider store={store} key="provider">
+            <StaticRouter location={url} context={context}>
+              <ReduxAsyncConnect routes={routes} helpers={{ client }} />
+            </StaticRouter>
+          </Provider>
+        </Loadable.Capture>
       );
   
       const content = ReactDOM.renderToString(component);
@@ -280,7 +283,12 @@ export default function (parameters) {
       if (context.url) {
         return res.redirect(302, context.url);
       }
-  
+
+      const bundles = getBundles(getChunks(), modules);
+      // const bundles = getBundles(chunksPath, modules);
+
+      console.log('>>>>>>>>>>>>>>>> SERVER > APP.USE > ASYNC !! > bundles: ', bundles.length);
+
       const html = <Html assets={chunks} content={content} store={store} />;
 
       console.log('>>>>>>>>>>>>>>>> SERVER > APP.USE > ASYNC !! > html: ', html);
@@ -289,7 +297,9 @@ export default function (parameters) {
 
       console.log('>>>>>>>>>>>>>>> SERVER > SERVER.JS > global.__DLLS__ >>>>>>>>>>>>>>>>>>>>: ', global.__DLLS__);
 
+      // res.status(200).send('SERVER > Response Ended For Testing!!!!!!! Status 200!!!!!!!!!');
       res.status(200).send(`<!doctype html>${ReactDOM.renderToString(html)}`);
+
     } catch (error) {
       console.log('>>>>>>>>>>>>>>>> SERVER > APP.USE > ASYNC !! > TRY > ERROR > error: ', error);
       if (error.name === 'RedirectError') {
