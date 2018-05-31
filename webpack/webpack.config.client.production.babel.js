@@ -7,7 +7,7 @@ const Visualizer = require('webpack-visualizer-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const { clientConfiguration } = require('universal-webpack');
 
-// const ReactLoadablePlugin = require('react-loadable/webpack').ReactLoadablePlugin;
+const ReactLoadablePlugin = require('react-loadable/webpack').ReactLoadablePlugin;
 
 const settings = require('./universal-webpack-settings');
 const base_configuration = require('./webpack.config');
@@ -81,9 +81,9 @@ configuration.plugins.push(
     canPrint: true, // indicating if the plugin can print messages to the console (default true)
   }),
 
-  // new ReactLoadablePlugin({
-  //   filename: path.join(buildPath, 'loadable-chunks.json')
-  // }),
+  new ReactLoadablePlugin({
+    filename: path.join(configuration.output.path, 'loadable-chunks.json')
+  }),
 
   // https://blog.etleap.com/2017/02/02/inspecting-your-webpack-bundle/
   new Visualizer({

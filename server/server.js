@@ -31,13 +31,26 @@ import { StaticRouter, matchPath } from 'react-router';
 import { ReduxAsyncConnect, loadOnServer } from 'redux-connect';
 
 import createMemoryHistory from 'history/createMemoryHistory';
-import createStore from '../client/redux/create';
 
+import createStore from '../client/redux/create';
+// import createStore from 'redux/create';
+
+import { ConnectedRouter } from 'react-router-redux';
+import { renderRoutes } from 'react-router-config';
+import Loadable from 'react-loadable';
+import { getBundles } from 'react-loadable/webpack';
 import { trigger } from 'redial';
 
 import Html from './helpers/Html';
 import routes from '../client/routes';
 import { parse as parseUrl } from 'url';
+
+import { getChunks, waitChunks } from './utils/chunks';
+
+// #########################################################################
+
+const chunksPath = path.join(__dirname, '..', 'public', 'assets', 'loadable-chunks.json');
+console.log('>>>>>>>>>>>>>>>>> SERVER > chunksPath +++++++++: ', chunksPath);
 
 // #########################################################################
 
@@ -291,13 +304,13 @@ export default function (parameters) {
   
   (async () => {
 
-    // try {
-    //   await Loadable.preloadAll();
-    //   const wc = await waitChunks(chunksPath);
-    //   // console.log('>>>>>>>>>>>>>>>>>>> waitChunks(chunksPath):', wc);
-    // } catch (error) {
-    //   console.log('Server preload error:', error);
-    // }
+    try {
+      await Loadable.preloadAll();
+      const wc = await waitChunks(chunksPath);
+      // console.log('>>>>>>>>>>>>>>>>> SERVER > Loadable.preloadAll() > waitChunks(): ', wc);
+    } catch (error) {
+      console.log('>>>>>>>>>>>>>>>>> SERVER > Loadable.preloadAll() > ERROR: ', error);
+    }
 
     server.listen( app.get('port'), serverConfig.host, () => {
       console.log('>>>>>>>>>>>>>>>> server.js > Express server Connected: ', server.address());

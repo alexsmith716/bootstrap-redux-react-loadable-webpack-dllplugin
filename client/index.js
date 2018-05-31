@@ -13,6 +13,8 @@ import apiClient from '../server/helpers/apiClient';
 import routes from './routes';
 import isOnline from '../server/utils/isOnline';
 
+import Loadable from 'react-loadable';
+
 const offlinePersistConfig = {
   storage: localForage,
   whitelist: ['auth', 'info']
@@ -54,6 +56,8 @@ console.log('>>>>>>>>>>>>>>>>>>>>>>>> CLIENT.JS > __DEVTOOLS__ !!!!!: ', __DEVTO
       , dest
     );
   };
+
+  // await Loadable.preloadReady();
 
   hydrate(routes);
 
