@@ -1,9 +1,12 @@
 const webpack = require('webpack');
 const path = require('path');
+
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const Visualizer = require('webpack-visualizer-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const { clientConfiguration } = require('universal-webpack');
 
@@ -14,7 +17,8 @@ const base_configuration = require('./webpack.config');
 
 // With `development: false` all CSS will be extracted into a file
 // named '[name]-[contenthash].css' using `mini-css-extract-plugin`.
-const configuration = clientConfiguration(base_configuration, settings, { development: false, useMiniCssExtractPlugin: true });
+// const configuration = clientConfiguration(base_configuration, settings, { development: false, useMiniCssExtractPlugin: true });
+const configuration = clientConfiguration(base_configuration, settings);
 
 const buildPath = path.resolve(configuration.context, './build/public/assets');
 
@@ -23,6 +27,8 @@ const visualizerPath = path.resolve(configuration.context, './build/analyzers/vi
 const assetsPath = path.resolve(configuration.context, './build/public/assets');
 const serverPath = path.resolve(configuration.context, './build/server');
 
+const devMode = process.env.NODE_ENV !== 'production';
+
 configuration.devtool = 'source-map';
 // configuration.devtool = 'hidden-source-map';
 
@@ -30,6 +36,69 @@ configuration.devtool = 'source-map';
 // configuration.optimization.minimizer = [];
 
 configuration.output.filename = '[name]-[chunkhash].js';
+
+configuration.entry.main.push(
+  'bootstrap-loader',
+  './client/index.entry.js',
+);
+
+configuration.module.rules.push(
+  {
+    test: /\.(scss)$/,
+    use: [
+      MiniCssExtractPlugin.loader,
+      {
+        loader: 'css-loader',
+        options: {
+          modules: true,
+          importLoaders: 2,
+          sourceMap: true,
+          localIdentName: '[name]__[local]__[hash:base64:5]',
+        }
+      },
+      {
+        loader: 'postcss-loader',
+        options: {
+          sourceMap: true,
+        }
+      },
+      {
+        loader: 'sass-loader',
+        options: {
+          outputStyle: 'expanded',
+          sourceMap: true,
+          // sourceMapContents: true
+        }
+      },
+      {
+        loader: 'sass-resources-loader',
+        options: {
+          resources: [
+            path.resolve(configuration.context, 'client/assets/scss/mixins/mixins.scss')
+          ],
+        },
+      },
+    ]
+  },
+  {
+    test: /\.(css)$/,
+    use: [
+      MiniCssExtractPlugin.loader,
+      {
+        loader : 'css-loader',
+        options: {
+          modules: true,
+          localIdentName: '[name]__[local]__[hash:base64:5]',
+          importLoaders: 1,
+          sourceMap: true
+        }
+      },
+      {
+        loader : 'postcss-loader'
+      },
+    ]
+  },
+);
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // PLUGINS +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -49,6 +118,11 @@ configuration.plugins.push(
     __DEVELOPMENT__: false,
     __DEVTOOLS__: false,
     __DLLS__: false,
+  }),
+
+  new MiniCssExtractPlugin({
+    filename: '[name].[hash].css',
+    chunkFilename: '[id].[hash].css',
   }),
 
   new UglifyJsPlugin({
@@ -99,6 +173,24 @@ configuration.plugins.push(
     // defaultSizes: 'parsed',
     openAnalyzer: false,
     generateStatsFile: false
+  }),
+
+  new webpack.ProvidePlugin({
+    $: 'jquery',
+    jQuery: 'jquery',
+    jquery: 'jquery',
+    Popper: ['popper.js', 'default'],
+    Alert: "exports-loader?Alert!bootstrap/js/dist/alert",
+    Button: "exports-loader?Button!bootstrap/js/dist/button",
+    Carousel: "exports-loader?Carousel!bootstrap/js/dist/carousel",
+    Collapse: "exports-loader?Collapse!bootstrap/js/dist/collapse",
+    Dropdown: "exports-loader?Dropdown!bootstrap/js/dist/dropdown",
+    Modal: "exports-loader?Modal!bootstrap/js/dist/modal",
+    Popover: "exports-loader?Popover!bootstrap/js/dist/popover",
+    Scrollspy: "exports-loader?Scrollspy!bootstrap/js/dist/scrollspy",
+    Tab: "exports-loader?Tab!bootstrap/js/dist/tab",
+    Tooltip: "exports-loader?Tooltip!bootstrap/js/dist/tooltip",
+    Util: "exports-loader?Util!bootstrap/js/dist/util",
   }),
 
 );

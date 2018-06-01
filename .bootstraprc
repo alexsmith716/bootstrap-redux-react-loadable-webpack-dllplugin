@@ -1,18 +1,6 @@
 {
-  "bootstrapVersion": 4,
-  // Bootstrap variables that get imported before original Bootstrap variables
-  "preBootstrapCustomizations": "./client/assets/scss/bootstrap/customizations/preBootstrapCustomizations.scss",
-  // customize Bootstrap variables based on the values established in the Bootstrap _variables.scss file
-  "bootstrapCustomizations": "./client/assets/scss/bootstrap/customizations/bootstrapCustomizations.scss",
-  // custom styles. @imports of application styles
-  "appStyles": "./client/assets/scss/app/app3.scss",
-  // Outputs debugging info
   "loglevel": "disabled",
-  // NODE_ENV environment variable
-  // ----------------------------------------------------------------------------------------
-  // #### PostCSS
-  // Bootstrap 4 seems to require postcss (MAYBE):
-  // Put `postcss` before `sass` in the order of loaders in your `.bootstraprc` file.
+  "bootstrapVersion": 4,
   "env": {
     "development": {
       "styleLoaders": [
@@ -25,31 +13,16 @@
     },
     "production": {
       "styleLoaders": [
-        "style-loader",
         "css-loader",
-        "sass-loader?sourceMap",
-        "postcss-loader?sourceMap",
+        "sass-loader",
+        "postcss-loader",
       ],
-      "extractStyles": false,
+      "extractStyles": true,
     }
   },
-  // Bootstrap scripts (Default: all)
-  // "scripts": true / false // enable/disable all scripts
-  "scripts": {
-    "alert": true,
-    "button": true,
-    "carousel": true,
-    "collapse": true,
-    "dropdown": true,
-    "modal": true,
-    "popover": true,
-    "scrollspy": true,
-    "tab": true,
-    "tooltip": true,
-    "util": true
-  },
-  // Bootstrap styles (Default: all)
-  // "styles": true / false // enable/disable all scripts
+  "preBootstrapCustomizations": "./client/assets/scss/bootstrap/customizations/preBootstrapCustomizations.scss",
+  "bootstrapCustomizations": "./client/assets/scss/bootstrap/customizations/bootstrapCustomizations.scss",
+  "appStyles": "./client/assets/scss/app/app3.scss",
   "styles": {
     "alert": true,
     "badge": true,
@@ -85,5 +58,18 @@
     "transitions": true,
     "type": true,
     "utilities": true
+  },
+  "scripts": {
+    "alert": true,
+    "button": true,
+    "carousel": true,
+    "collapse": true,
+    "dropdown": true,
+    "modal": true,
+    "popover": true,
+    "scrollspy": true,
+    "tab": true,
+    "tooltip": true,
+    "util": true
   }
 }

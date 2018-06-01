@@ -141,18 +141,18 @@ export default function (parameters) {
     console.log('>>>>>>>>>>>>>>>>> SERVER > $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ IN < $$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
     return next();
   });
-  
+
   app.use(morgan('dev'));
   app.use(helmet());
   app.use(cors());
   //app.use(headers);
-  
+
   // #########################################################################
-  
+
   if (process.env.NODE_ENV === 'development') {
     //app.use(delay(200, 300));
   }
-  
+
   // #########################################################################
 
   app.use('/dlls/:dllName.js', (req, res, next) => {
@@ -162,7 +162,7 @@ export default function (parameters) {
       err => (err ? res.send(`console.log('No dll file found (${req.originalUrl})')`) : next())
     );
   });
-  
+
   app.use(compression());
   app.use('/assets', express.static(path.join(__dirname, '../public/assets')));
   app.use(favicon(path.join(__dirname, '../public/static/favicon', 'favicon.ico')));
@@ -170,22 +170,22 @@ export default function (parameters) {
   app.use('/manifest.json', (req, res) => res.sendFile(path.join(__dirname, '../public/static/manifest/manifest.json')));
 
   // #########################################################################
-  
+
   // production +++++++++++++++++++++++++++++++
   //app.use('/dist/service-worker.js', (req, res, next) => {
   //  res.setHeader('Service-Worker-Allowed', '/');
   //  return next();
   //});
-  
+
   // #########################################################################
   
   // saveUninitialized: false, // don't create session until something stored
   // resave: false, // don't save session if unmodified
-  
+
   app.use(bodyParser.json({ limit: '20mb' }));
   app.use(bodyParser.urlencoded({ limit: '20mb', extended: false }));
   app.use(cookieParser());
-  
+
   // app.use(/\/api/, session({
   app.use(session({
     // secret: process.env.SESSION_SECRET,
@@ -197,21 +197,21 @@ export default function (parameters) {
       touchAfter: 0.5 * 3600
     })
   }));
-  
+
   app.use((req, res, next) => {
     console.log('>>>>>>>>>>>>>>>> SERVER > REQ.headers ++++  111z: ', req.headers);
     console.log('>>>>>>>>>>>>>>>> SERVER > REQ.session ++++  111z: ', req.session);
     console.log('>>>>>>>>>>>>>>>> SERVER > REQ.cookies ++++  111z: ', req.cookies);
     return next();
   });
-  
+
   // #########################################################################
-  
+
   // app.use(/\/api/, apiRouter);
   app.use('/api', apiRouter);
   
   // #########################################################################
-  
+
   // app.use((req, res) => {
   //   res.status(200).send('SERVER > Response Ended For Testing!!!!!!! Status 200!!!!!!!!!');
   // });
@@ -223,7 +223,7 @@ export default function (parameters) {
     // const chunks = {...parameters.chunks()};
 
     console.log('>>>>>>>>>>>>>>>> SERVER > CHUNKS !!!!!!!!!: ', chunks);
-  
+
     console.log('>>>>>>>>>>>>>>>> SERVER > APP.USE > ASYNC !! > SetUpComponent !! START !! $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
 
     const url = req.originalUrl || req.url;
@@ -248,11 +248,11 @@ export default function (parameters) {
     console.log('>>>>>>>>>>>>>>>> SERVER > APP.USE > ASYNC !! > SetUpComponentDone !! > store: ', store);
 
     console.log('>>>>>>>>>>>>>>>> SERVER > APP.USE > ASYNC !! > SetUpComponent !! END !! $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
-  
-    const hydrate = () => {
+
+    function hydrate() {
       res.write('<!doctype html>');
-      ReactDOM.renderToNodeStream(<Html assets={chunks} store={store} />).pipe(res);
-    };
+      ReactDOM.renderToNodeStream(<Html assets={webpackIsomorphicTools.assets()} store={store} />).pipe(res);
+    }
 
     if (__DISABLE_SSR__) {
       return hydrate();
@@ -260,14 +260,14 @@ export default function (parameters) {
 
     try {
       console.log('>>>>>>>>>>>>>>>>> SERVER > $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ loadOnServer START $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
-  
+
       await loadOnServer({store, location, routes, helpers: { client }});
-  
+
       console.log('>>>>>>>>>>>>>>>>> SERVER > $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ loadOnServer END $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
-  
+
       const context = {};
       const modules = [];
-  
+
       const component = (
         <Loadable.Capture report={moduleName => modules.push(moduleName)}>
           <Provider store={store} key="provider">
@@ -277,9 +277,9 @@ export default function (parameters) {
           </Provider>
         </Loadable.Capture>
       );
-  
+
       const content = ReactDOM.renderToString(component);
-  
+
       if (context.url) {
         return res.redirect(302, context.url);
       }
@@ -292,7 +292,7 @@ export default function (parameters) {
       const html = <Html assets={chunks} content={content} store={store} />;
 
       console.log('>>>>>>>>>>>>>>>> SERVER > APP.USE > ASYNC !! > html: ', html);
-  
+
       console.log('>>>>>>>>>>>>>>>> SERVER > APP.USE > ASYNC !! > DID IT !! HTML <<<<<<<<<<<<<<<<<<');
 
       console.log('>>>>>>>>>>>>>>> SERVER > SERVER.JS > global.__DLLS__ >>>>>>>>>>>>>>>>>>>>: ', global.__DLLS__);
@@ -311,13 +311,13 @@ export default function (parameters) {
   });
 
   // #########################################################################
-  
+
   (async () => {
 
     try {
       await Loadable.preloadAll();
       const wc = await waitChunks(chunksPath);
-      // console.log('>>>>>>>>>>>>>>>>> SERVER > Loadable.preloadAll() > waitChunks(): ', wc);
+      console.log('>>>>>>>>>>>>>>>>> SERVER > Loadable.preloadAll() > waitChunks(): ', wc);
     } catch (error) {
       console.log('>>>>>>>>>>>>>>>>> SERVER > Loadable.preloadAll() > ERROR: ', error);
     }
@@ -325,17 +325,17 @@ export default function (parameters) {
     server.listen( app.get('port'), serverConfig.host, () => {
       console.log('>>>>>>>>>>>>>>>> server.js > Express server Connected: ', server.address());
     });
-    
+
     server.on('error', (err) => {
-    
+
       if (err.syscall !== 'listen') {
         console.log('>>>>>>>>>>>>>>>> server.js > Express server error: ', err);
       }
-    
+
       var bind = typeof port === 'string'
         ? 'Pipe ' + port
         : 'Port ' + port;
-    
+
       switch (err.code) {
         case 'EACCES':
           console.log('>>>>>>>>>>>>>>>> server.js > Express server error: ' + bind + ' requires elevated privileges');
@@ -349,7 +349,7 @@ export default function (parameters) {
           console.log('>>>>>>>>>>>>>>>> server.js > Express server error.code: ', err.code);
       }
     });
-    
+
     server.on('listening', () => {
       var addr = server.address();
       var bind = typeof addr === 'string'
@@ -357,7 +357,7 @@ export default function (parameters) {
         : 'port ' + addr.port;
       console.log('>>>>>>>>>>>>>>>> server.js > Express server Listening on: ', bind);
     });
-    
+
     // https://nodejs.org/api/net.html#net_class_net_socket
     // https://nodejs.org/api/http.html#http_event_upgrade
     server.on('upgrade', (req, socket, head) => {
