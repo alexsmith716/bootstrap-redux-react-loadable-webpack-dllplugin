@@ -6,6 +6,24 @@
 App is a continuation of repo 'react-redux-webpack-bootstrap-mongo-universal-webpack'.
 
 
+### Universal-Webpack:
+
+Generates client-side and server-side configuration for Webpack. Enables seamless client-side/server-side Webpack builds.
+
+The server() configuration function takes the client-side Webpack configuration and tunes it a bit for server-side usage (target: "node").
+
+  * target: "web", // enum
+  * target: "node", // Node.js via require
+  * // the environment in which the bundle should run
+  * // changes chunk loading behavior and available modules
+
+  * node webpack will compile for usage in a Node.js-like environment
+
+The server-side bundle (settings.server.output file) is generated from settings.server.input file by Webpack when it's run with the webpack.config.server.babel.js configuration.
+
+OK, compared output of `Universal-Webpack`'s `{ serverConfiguration }` `'./webpack.config.server.production.babel.js'` to this repos output of `{ serverConfiguration }` `'./webpack.config.server.production.babel.js'` and the results are appearing standardized and basically the same. Also, `'universal-webpack'` `{ clientConfiguration }` and `{ serverConfiguration }` are clearly using their own instance of base config `'./webpack.config.js'`. No modification of base config is going on, only client and server using their own instance of it. Also, in `node_modules` > `Universal-Webpack`, I tested builds against modifications to `devtool`. Confidence check on my part. I do though wonder about errors arising from customization to a library/framework.
+
+
 ### DllPlugin:
 
 The DllPlugin and DllReferencePlugin provide means to split bundles in a way that can drastically improve build time performance.

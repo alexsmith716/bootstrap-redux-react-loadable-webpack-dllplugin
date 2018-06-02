@@ -10,13 +10,12 @@
 //   }
 // };
 
-import webpack from 'webpack';
-import baseConfiguration from './webpack.config.server.production.babel';
+const webpack = require('webpack');
+const baseConfiguration = require('./webpack.config.server.production.babel');
+const settings = require('../configuration');
 
-import settings from '../configuration'
 
 const configuration = Object.assign({}, baseConfiguration);
-
 const publicPath = configuration.output.publicPath;
 
 configuration.mode = 'development',
