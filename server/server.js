@@ -251,7 +251,7 @@ export default function (parameters) {
 
     function hydrate() {
       res.write('<!doctype html>');
-      ReactDOM.renderToNodeStream(<Html assets={webpackIsomorphicTools.assets()} store={store} />).pipe(res);
+      ReactDOM.renderToNodeStream(<Html assets={chunks} store={store} />).pipe(res);
     }
 
     if (__DISABLE_SSR__) {
@@ -287,9 +287,9 @@ export default function (parameters) {
       const bundles = getBundles(getChunks(), modules);
       // const bundles = getBundles(chunksPath, modules);
 
-      console.log('>>>>>>>>>>>>>>>> SERVER > APP.USE > ASYNC !! > bundles: ', bundles.length);
+      console.log('>>>>>>>>>>>>>>>> SERVER > APP.USE > ASYNC !! > bundles: ', bundles);
 
-      const html = <Html assets={chunks} content={content} store={store} />;
+      const html = <Html assets={chunks} bundles={bundles} content={content} store={store} />;
 
       console.log('>>>>>>>>>>>>>>>> SERVER > APP.USE > ASYNC !! > html: ', html);
 
@@ -301,10 +301,8 @@ export default function (parameters) {
       res.status(200).send(`<!doctype html>${ReactDOM.renderToString(html)}`);
 
     } catch (error) {
+
       console.log('>>>>>>>>>>>>>>>> SERVER > APP.USE > ASYNC !! > TRY > ERROR > error: ', error);
-      if (error.name === 'RedirectError') {
-        return res.redirect(VError.info(error).to);
-      }
       res.status(500);
       hydrate();
     }

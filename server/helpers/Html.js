@@ -7,7 +7,7 @@ import config from '../config';
 // https://reactjs.org/docs/dom-elements.html <<<<<<<<< 'dangerouslySetInnerHTML'
 
 const Html = props => {
-  const { assets, content, store } = props;
+  const { assets, content, store , bundles } = props;
   const head = Helmet.renderStatic();
 
   console.log('>>>>>> HTML.JS > Object.keys(assets.styles): ', Object.keys(assets.styles));
@@ -55,9 +55,9 @@ const Html = props => {
   // PRODUCTION -------------------------------------------------------------------------------------------
   // >>>>>> HTML.JS > Object.keys(assets.styles):  [ 'main' ]
   // >>>>>> HTML.JS > Object.keys(assets.styles).length:  1
-  // >>>>>> HTML.JS > assets.styles:  { main: '/assets/main-124723e1e8bf11ebfacc.css' }
-  // >>>>>> HTML.JS > assets:  { javascript: { main: '/assets/main-a4447c0b9b4a53981db2.js' },
-  //   styles: { main: '/assets/main-124723e1e8bf11ebfacc.css' } }
+  // >>>>>> HTML.JS > assets.styles:  { main: '/assets/main.85cbc24ae1c3ff6ce1a9.css' }
+  // >>>>>> HTML.JS > assets:  { javascript: { main: '/assets/main-b0a918c8e5726e7035a3.js' },
+  //   styles: { main: '/assets/main.85cbc24ae1c3ff6ce1a9.css' } }
 
 
   return (
@@ -118,6 +118,8 @@ const Html = props => {
         {__DLLS__ !== true && console.log(">>>>>>>>>>>>>>> NO __DLLS__ <<<<<<<<<<<<<<<<<<")}
 
         {__DLLS__ && <script key="dlls__vendor" src="/assets/dlls/dll__vendor.js" charSet="UTF-8" />}
+
+        {/*{bundles.map(bundle => bundle && <script src={config.assetsPath + bundle.file} key={bundle.id} />)}*/}
 
         {/* (>>>>>>> JAVASCRIPTS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<) */}
         {Object.keys(assets.javascript).length > 0 &&
