@@ -1,8 +1,8 @@
-import { serverConfiguration } from 'universal-webpack';
-import settings from './universal-webpack-settings';
-import configuration2 from './webpack.config';
+const { serverConfiguration } = require('universal-webpack');
+const settings = require('./universal-webpack-settings');
+const configuration2 = require('./webpack.config');
+// const merge = require('webpack-merge');
 const path = require('path');
-
 
 //configuration2.entry.main.pop();
 //configuration2.module.rules.pop();
@@ -85,5 +85,7 @@ console.log('>>>>>>>>>>> WCSPB > configuration2.entry.main >>>>>>>>3: ', configu
 console.log('>>>>>>>>>>> WCSPB > configuration2.module.rules >>>>>>>>3: ', configuration2.module.rules);
 
 const configurationServer = serverConfiguration(configuration2, settings);
+
+console.log('>>>>>>>>>>>>>>>>>>> WCCPB SERVER PROD: ', configurationServer)
 
 export default configurationServer;

@@ -195,4 +195,6 @@ configuration.plugins.push(
 
 );
 
+console.log('>>>>>>>>>>>>>>>>>>> WCCPB CLIENT PROD: ', configuration)
+
 export default configuration;
