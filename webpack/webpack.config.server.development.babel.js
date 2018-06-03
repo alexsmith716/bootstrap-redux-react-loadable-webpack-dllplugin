@@ -25,21 +25,5 @@ configuration.output.publicPath = `http://${settings.webpack.devserver.host}:${s
 
 console.log('>>>>>> webpack.config.server.development.babel.js > configuration.output.publicPath: ', configuration.output.publicPath);
 
-// configuration.plugins = configuration.plugins.concat(
-//     new webpack.IgnorePlugin(/\/iconv-loader$/),
-//     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-//     new webpack.DefinePlugin({
-//       'process.env': {
-//         CLIENT: JSON.stringify(false),
-//         NODE_ENV  : JSON.stringify('development'),
-//         BABEL_ENV : JSON.stringify('development/server')
-//       },
-//       REDUX_DEVTOOLS : true,
-//       __CLIENT__: false,
-//       __SERVER__: true,
-//       __DEVELOPMENT__: true,
-//       __DEVTOOLS__: true,
-//     }),
-// );
 
 export default configuration;

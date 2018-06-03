@@ -1,21 +1,13 @@
 const { serverConfiguration } = require('universal-webpack');
 const settings = require('./universal-webpack-settings');
-const configuration2 = require('./webpack.config');
-// const merge = require('webpack-merge');
+const base_configuration = require('./webpack.config');
 const path = require('path');
 
-//configuration2.entry.main.pop();
-//configuration2.module.rules.pop();
-console.log('>>>>>>>>>>> WCSPB > configuration2.entry.main >>>>>>>>1: ', configuration2.entry.main);
-console.log('>>>>>>>>>>> WCSPB > configuration2.module.rules >>>>>>>>1: ', configuration2.module.rules);
-//configuration2.entry.main.length = 0;
-//configuration2.module.rules.length = 0;
-
-configuration2.entry.main.push(
+base_configuration.entry.main.push(
   './client/index.entry.js',
 );
 
-configuration2.module.rules.push(
+base_configuration.module.rules.push(
   {
     test: /\.(scss)$/,
     use: [
@@ -52,7 +44,7 @@ configuration2.module.rules.push(
         loader: 'sass-resources-loader',
         options: {
           resources: [
-            path.resolve(configuration2.context, 'client/assets/scss/mixins/mixins.scss')
+            path.resolve(base_configuration.context, 'client/assets/scss/mixins/mixins.scss')
           ],
         },
       },
@@ -81,11 +73,6 @@ configuration2.module.rules.push(
 
 );
 
-console.log('>>>>>>>>>>> WCSPB > configuration2.entry.main >>>>>>>>3: ', configuration2.entry.main);
-console.log('>>>>>>>>>>> WCSPB > configuration2.module.rules >>>>>>>>3: ', configuration2.module.rules);
-
-const configurationServer = serverConfiguration(configuration2, settings);
-
-console.log('>>>>>>>>>>>>>>>>>>> WCCPB SERVER PROD: ', configurationServer)
+const configurationServer = serverConfiguration(base_configuration, settings);
 
 export default configurationServer;

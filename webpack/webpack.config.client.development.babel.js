@@ -12,10 +12,9 @@ const ReactLoadablePlugin = require('react-loadable/webpack').ReactLoadablePlugi
 
 // With `development: false` all CSS will be extracted into a file
 // named '[name]-[contenthash].css' using `mini-css-extract-plugin`.
-const configuration = clientConfiguration(base_configuration, settings, { development: true });
+const configuration = clientConfiguration(base_configuration, settings);
 
 // https://github.com/webpack-contrib/webpack-serve/issues/81#issuecomment-378469110
-// export default const configuration = ...
 module.exports = configuration;
 
 var validDLLs = helpers.isValidDLLs('vendor', configuration.output.path);
@@ -35,6 +34,80 @@ configuration.mode = 'development';
 configuration.devtool = 'inline-source-map';
 
 configuration.output.filename = '[name]-[hash].js';
+configuration.output.chunkFilename = '[name]-[chunkhash].chunk.js';
+
+configuration.entry.main.push(
+  'bootstrap-loader',
+  './client/index.entry.js',
+);
+
+configuration.module.rules.push(
+  {
+    test: /\.(scss)$/,
+    use: [
+      {
+        loader: 'style-loader',
+        options: { 
+          sourceMap: true 
+        }
+      },
+      {
+        loader: 'css-loader',
+        options: {
+          modules: true,
+          importLoaders: 2,
+          sourceMap: true,
+          localIdentName: '[name]__[local]__[hash:base64:5]',
+        }
+      },
+      {
+        loader: 'postcss-loader',
+        options: {
+          sourceMap: true,
+        }
+      },
+      {
+        loader: 'sass-loader',
+        options: {
+          outputStyle: 'expanded',
+          sourceMap: true,
+          // sourceMapContents: true
+        }
+      },
+      {
+        loader: 'sass-resources-loader',
+        options: {
+          resources: [
+            path.resolve(configuration.context, 'client/assets/scss/mixins/mixins.scss')
+          ],
+        },
+      },
+    ]
+  },
+  {
+    test: /\.(css)$/,
+    use: [
+      {
+        loader: 'style-loader',
+        options: { 
+          sourceMap: true 
+        }
+      },
+      {
+        loader : 'css-loader',
+        options: {
+          modules: true,
+          localIdentName: '[name]__[local]__[hash:base64:5]',
+          importLoaders: 1,
+          sourceMap: true
+        }
+      },
+      {
+        loader : 'postcss-loader'
+      },
+    ]
+  },
+);
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // PLUGINS +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
