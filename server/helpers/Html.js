@@ -49,15 +49,15 @@ const Html = props => {
   // >>>>>> HTML.JS > Object.keys(assets.styles).length:  0
   // >>>>>> HTML.JS > assets.styles:  {}
   // >>>>>> HTML.JS > assets:  { javascript:
-  //    { main: 'http://localhost:3001/assets/main-6ba432e5e33da3b51af6.js' },
+  //    { main: 'http://localhost:3001/assets/main-5d9cc7a91cc4f85e755b.js' },
   //   styles: {} }
 
   // PRODUCTION -------------------------------------------------------------------------------------------
   // >>>>>> HTML.JS > Object.keys(assets.styles):  [ 'main' ]
   // >>>>>> HTML.JS > Object.keys(assets.styles).length:  1
-  // >>>>>> HTML.JS > assets.styles:  { main: '/assets/main.85cbc24ae1c3ff6ce1a9.css' }
-  // >>>>>> HTML.JS > assets:  { javascript: { main: '/assets/main-b0a918c8e5726e7035a3.js' },
-  //   styles: { main: '/assets/main.85cbc24ae1c3ff6ce1a9.css' } }
+  // >>>>>> HTML.JS > assets.styles:  { main: '/assets/main.f96d1142bd7cb4088124.css' }
+  // >>>>>> HTML.JS > assets:  { javascript: { main: '/assets/main-0e4d3c3791dd170d129e.js' },
+  //   styles: { main: '/assets/main.f96d1142bd7cb4088124.css' } }
 
 
   return (

@@ -20,14 +20,10 @@ const base_configuration = require('./webpack.config');
 // const configuration = clientConfiguration(base_configuration, settings, { development: false, useMiniCssExtractPlugin: true });
 const configuration = clientConfiguration(base_configuration, settings);
 
-const buildPath = path.resolve(configuration.context, './build/public/assets');
-
 const bundleAnalyzerPath = path.resolve(configuration.context, './build/analyzers/bundleAnalyzer');
 const visualizerPath = path.resolve(configuration.context, './build/analyzers/visualizer');
 const assetsPath = path.resolve(configuration.context, './build/public/assets');
 const serverPath = path.resolve(configuration.context, './build/server');
-
-const devMode = process.env.NODE_ENV !== 'production';
 
 configuration.devtool = 'source-map';
 // configuration.devtool = 'hidden-source-map';
@@ -36,6 +32,7 @@ configuration.devtool = 'source-map';
 // configuration.optimization.minimizer = [];
 
 configuration.output.filename = '[name]-[chunkhash].js';
+configuration.output.chunkFilename = '[name]-[chunkhash].chunk.js';
 
 configuration.entry.main.push(
   'bootstrap-loader',
@@ -175,26 +172,6 @@ configuration.plugins.push(
     generateStatsFile: false
   }),
 
-  new webpack.ProvidePlugin({
-    $: 'jquery',
-    jQuery: 'jquery',
-    jquery: 'jquery',
-    Popper: ['popper.js', 'default'],
-    Alert: "exports-loader?Alert!bootstrap/js/dist/alert",
-    Button: "exports-loader?Button!bootstrap/js/dist/button",
-    Carousel: "exports-loader?Carousel!bootstrap/js/dist/carousel",
-    Collapse: "exports-loader?Collapse!bootstrap/js/dist/collapse",
-    Dropdown: "exports-loader?Dropdown!bootstrap/js/dist/dropdown",
-    Modal: "exports-loader?Modal!bootstrap/js/dist/modal",
-    Popover: "exports-loader?Popover!bootstrap/js/dist/popover",
-    Scrollspy: "exports-loader?Scrollspy!bootstrap/js/dist/scrollspy",
-    Tab: "exports-loader?Tab!bootstrap/js/dist/tab",
-    Tooltip: "exports-loader?Tooltip!bootstrap/js/dist/tooltip",
-    Util: "exports-loader?Util!bootstrap/js/dist/util",
-  }),
-
 );
-
-console.log('>>>>>>>>>>>>>>>>>>> WCCPB CLIENT PROD: ', configuration)
 
 export default configuration;
