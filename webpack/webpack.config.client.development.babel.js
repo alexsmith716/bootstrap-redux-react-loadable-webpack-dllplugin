@@ -1,17 +1,13 @@
 const webpack = require('webpack');
 const helpers = require('./helpers');
 const path = require('path');
+
+const ReactLoadablePlugin = require('react-loadable/webpack').ReactLoadablePlugin;
+
 const base_configuration = require('./webpack.config');
 const application_configuration = require('../configuration');
 const settings = require('./universal-webpack-settings');
 const { clientConfiguration } = require('universal-webpack');
-
-const rootPath = path.resolve(__dirname, '..');
-
-const ReactLoadablePlugin = require('react-loadable/webpack').ReactLoadablePlugin;
-
-// With `development: false` all CSS will be extracted into a file
-// named '[name]-[contenthash].css' using `mini-css-extract-plugin`.
 const configuration = clientConfiguration(base_configuration, settings);
 
 // https://github.com/webpack-contrib/webpack-serve/issues/81#issuecomment-378469110
@@ -33,8 +29,8 @@ configuration.mode = 'development';
 // configuration.devtool = 'source-map';
 configuration.devtool = 'inline-source-map';
 
-configuration.output.filename = '[name]-[hash].js';
-configuration.output.chunkFilename = '[name]-[chunkhash].chunk.js';
+configuration.output.filename = '[name].[hash].js';
+configuration.output.chunkFilename = '[name].[chunkhash].chunk.js';
 
 configuration.entry.main.push(
   'bootstrap-loader',

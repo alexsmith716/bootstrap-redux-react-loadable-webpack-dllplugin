@@ -41,16 +41,44 @@ module.exports = {
         ]
       },
       {
-        test: /\.(ttf|eot|woff|woff2)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-            },
-          },
-        ]
+        test: /\.woff2?(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 10240,
+          mimetype: 'application/font-woff'
+        }
+      }, 
+      {
+        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 10240,
+          mimetype: 'application/octet-stream'
+        }
+      }, 
+      {
+        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'file-loader'
+      }, 
+      {
+        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 10240,
+          mimetype: 'image/svg+xml'
+        }
       },
+      // {
+      //   test: /\.(ttf|eot|woff|woff2)$/,
+      //   use: [
+      //     {
+      //       loader: 'file-loader',
+      //       options: {
+      //         name: '[name].[ext]',
+      //       },
+      //     },
+      //   ]
+      // },
     ]
   },
 
