@@ -6,18 +6,12 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const Visualizer = require('webpack-visualizer-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-const { clientConfiguration } = require('universal-webpack');
-
 const ReactLoadablePlugin = require('react-loadable/webpack').ReactLoadablePlugin;
 
+const { clientConfiguration } = require('universal-webpack');
 const settings = require('./universal-webpack-settings');
 const base_configuration = require('./webpack.config');
-
-// With `development: false` all CSS will be extracted into a file
-// named '[name]-[contenthash].css' using `mini-css-extract-plugin`.
-// const configuration = clientConfiguration(base_configuration, settings, { development: false, useMiniCssExtractPlugin: true });
 const configuration = clientConfiguration(base_configuration, settings);
 
 const bundleAnalyzerPath = path.resolve(configuration.context, './build/analyzers/bundleAnalyzer');
@@ -28,16 +22,18 @@ const serverPath = path.resolve(configuration.context, './build/server');
 configuration.devtool = 'source-map';
 // configuration.devtool = 'hidden-source-map';
 
-// configuration.optimization.minimize = true;
-// configuration.optimization.minimizer = [];
-
-configuration.output.filename = '[name]-[chunkhash].js';
-configuration.output.chunkFilename = '[name]-[chunkhash].chunk.js';
-
 configuration.entry.main.push(
   'bootstrap-loader',
   './client/index.entry.js',
 );
+
+// configuration.output.filename = '[name]-[chunkhash].js';
+// configuration.output.chunkFilename = '[name]-[chunkhash].chunk.js';
+configuration.output.filename = '[name].[chunkhash].js';
+configuration.output.chunkFilename = '[name].[chunkhash].chunk.js';
+
+// configuration.optimization.minimize = true;
+// configuration.optimization.minimizer = [];
 
 configuration.module.rules.push(
   {
@@ -97,6 +93,19 @@ configuration.module.rules.push(
   },
 );
 
+configuration.optimization = {
+  splitChunks: {
+    cacheGroups: {
+      styles: {
+        name: 'main', // Extract CSS based on entry && Extract all CSS in a single file
+        test: /\.s?[ac]ss$/,
+        chunks: 'all',
+        enforce: true
+      }
+    }
+  }
+}
+
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // PLUGINS +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -117,15 +126,32 @@ configuration.plugins.push(
     __DLLS__: false,
   }),
 
+  // [Hashes] - Enable Long Term Caching
+
+  // [hash]:
+  //    - Returns the build hash. If any portion of the build changes, this changes as well.
+
+  // [chunkhash]:
+  //    - Returns an entry chunk-specific hash. 
+  //    - Each `entry` defined in the configuration receives a hash of its own. 
+  //    - If any portion of the entry changes, the hash will change as well.
+
+  // [contenthash]:
+  //    - Returns a hash specific to content
+  //    - Calculated by extracted content not by full chunk content
+  //    - If you used `chunkhash` for the extracted CSS as well, this would lead to problems ...
+  //    -   ... as the code points to the CSS through JavaScript bringing it to the same entry. 
+  //    - That means if the application code or CSS changed, it would invalidate both.
+  //    - Therefore, instead of `chunkhash`, `contenthash` is generated based on the extracted content
+
   new MiniCssExtractPlugin({
-    filename: '[name].[hash].css',
-    chunkFilename: '[id].[hash].css',
+    // filename: '[name].css',
+    // filename: '[name].[hash].css',
+    filename: '[name].[contenthash].css',
+    // chunkFilename: '[id].[hash].css',
   }),
 
   new UglifyJsPlugin({
-    // test: ,  // {RegExp|Array<RegExp>}   /\.js$/i  Test to match files against
-    // include: ,  // {RegExp|Array<RegExp>}  undefined   Files to include
-    // exclude: ,  // {RegExp|Array<RegExp>}  undefined   Files to exclude
     cache: false,      // Enable file caching (default: false)
     parallel: true,   // Use multi-process parallel running to improve the build speed (default: false)
     sourceMap: true, // Use source maps to map error message locations to modules (default: false)
