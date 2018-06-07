@@ -27,13 +27,8 @@ configuration.entry.main.push(
   './client/index.entry.js',
 );
 
-// configuration.output.filename = '[name]-[chunkhash].js';
-// configuration.output.chunkFilename = '[name]-[chunkhash].chunk.js';
-configuration.output.filename = '[name].[chunkhash].js';
-configuration.output.chunkFilename = '[name].[chunkhash].chunk.js';
-
-// configuration.optimization.minimize = true;
-// configuration.optimization.minimizer = [];
+configuration.output.filename = '[name]-[chunkhash].js';
+configuration.output.chunkFilename = '[name]-[chunkhash].chunk.js';
 
 configuration.module.rules.push(
   {
@@ -97,7 +92,7 @@ configuration.optimization = {
   splitChunks: {
     cacheGroups: {
       styles: {
-        name: 'main', // Extract CSS based on entry && Extract all CSS in a single file
+        name: 'main',
         test: /\.s?[ac]ss$/,
         chunks: 'all',
         enforce: true
@@ -146,8 +141,8 @@ configuration.plugins.push(
 
   new MiniCssExtractPlugin({
     // filename: '[name].css',
-    // filename: '[name].[hash].css',
     filename: '[name].[contenthash].css',
+    // filename: '[name].[hash].css',
     // chunkFilename: '[id].[hash].css',
   }),
 

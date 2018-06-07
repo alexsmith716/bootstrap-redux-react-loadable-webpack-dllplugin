@@ -49,8 +49,9 @@ import { getChunks, waitChunks } from './utils/chunks';
 
 // #########################################################################
 
-const chunksPath = path.join(__dirname, '..', 'public', 'assets', 'loadable-chunks.json');
-console.log('>>>>>>>>>>>>>>>>> SERVER > chunksPath +++++++++: ', chunksPath);
+const loadableChunks = path.join(__dirname, '..', 'public', 'assets', 'loadable-chunks.json');
+// /Users/../bootstrap-redux-react-loadable-webpack-dllplugin/build/public/assets/loadable-chunks.json
+console.log('>>>>>>>>>>>>>>>>> SERVER > loadableChunks +++++++++: ', loadableChunks);
 
 // #########################################################################
 
@@ -224,7 +225,7 @@ export default function (parameters) {
 
     console.log('>>>>>>>>>>>>>>>> SERVER > CHUNKS !!!!!!!!!: ', chunks);
 
-    console.log('>>>>>>>>>>>>>>>> SERVER > APP.USE > ASYNC !! > SetUpComponent !! START !! $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+    console.log('>>>>>>>>>>>>>>>> SERVER > APP.USE > ASYNC !! > SetUpComponent !! START !! $$$$$$$$$$$$$$$$$$$$$$');
 
     const url = req.originalUrl || req.url;
     console.log('>>>>>>>>>>>>>>>> SERVER > APP.USE > ASYNC !! > SetUpComponentDone !! > url: ', url);
@@ -247,7 +248,7 @@ export default function (parameters) {
 
     console.log('>>>>>>>>>>>>>>>> SERVER > APP.USE > ASYNC !! > SetUpComponentDone !! > store: ', store);
 
-    console.log('>>>>>>>>>>>>>>>> SERVER > APP.USE > ASYNC !! > SetUpComponent !! END !! $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+    console.log('>>>>>>>>>>>>>>>> SERVER > APP.USE > ASYNC !! > SetUpComponent !! END !! $$$$$$$$$$$$$$$$$$$$$$$$$');
 
     function hydrate() {
       res.write('<!doctype html>');
@@ -259,11 +260,11 @@ export default function (parameters) {
     }
 
     try {
-      console.log('>>>>>>>>>>>>>>>>> SERVER > $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ loadOnServer START $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+      console.log('>>>>>>>>>>>>>>>>> SERVER > $$$$$$$$$$$$$$$$$$ loadOnServer START $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
 
       await loadOnServer({store, location, routes, helpers: { client }});
 
-      console.log('>>>>>>>>>>>>>>>>> SERVER > $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ loadOnServer END $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+      console.log('>>>>>>>>>>>>>>>>> SERVER > $$$$$$$$$$$$$$$$$$ loadOnServer END $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
 
       const context = {};
       const modules = [];
@@ -285,11 +286,11 @@ export default function (parameters) {
       }
 
       const bundles = getBundles(getChunks(), modules);
-      // const bundles = getBundles(chunksPath, modules);
+      // const bundles = getBundles(loadableChunks, modules);
 
       console.log('>>>>>>>>>>>>>>>> SERVER > APP.USE > ASYNC !! > bundles: ', bundles);
 
-      const html = <Html assets={chunks} bundles={bundles} content={content} store={store} />;
+      const html = <Html assets={chunks} content={content} store={store} bundles={bundles} />;
 
       console.log('>>>>>>>>>>>>>>>> SERVER > APP.USE > ASYNC !! > html: ', html);
 
@@ -303,9 +304,13 @@ export default function (parameters) {
     } catch (error) {
 
       console.log('>>>>>>>>>>>>>>>> SERVER > APP.USE > ASYNC !! > TRY > ERROR > error: ', error);
+
       res.status(500);
+
       hydrate();
+
     }
+
   });
 
   // #########################################################################
@@ -314,7 +319,7 @@ export default function (parameters) {
 
     try {
       await Loadable.preloadAll();
-      const wc = await waitChunks(chunksPath);
+      const wc = await waitChunks(loadableChunks);
       console.log('>>>>>>>>>>>>>>>>> SERVER > Loadable.preloadAll() > waitChunks(): ', wc);
     } catch (error) {
       console.log('>>>>>>>>>>>>>>>>> SERVER > Loadable.preloadAll() > ERROR: ', error);

@@ -27,6 +27,7 @@ console.log('>>>>>>>>>>>>>>>>>>>>>>>> CLIENT.JS <<<<<<<<<<<<<<<<<<<<<<<<<<<');
 console.log('>>>>>>>>>>>>>>>>>>>>>>>> CLIENT.JS > __DEVTOOLS__ !!!!!: ', __DEVTOOLS__);
 
 (async () => {
+
   const storedData = await getStoredState(offlinePersistConfig);
   console.log('>>>>>>>>>>>>>>>>>>> CLIENT.JS > storedData: ', storedData);
   const online = await (window.__data ? true : isOnline());
@@ -42,8 +43,6 @@ console.log('>>>>>>>>>>>>>>>>>>>>>>>> CLIENT.JS > __DEVTOOLS__ !!!!!: ', __DEVTO
   const store = createStore(history, client, data, offlinePersistConfig);
   console.log('>>>>>>>>>>>>>>>>>>> CLIENT.JS > store: ', store);
 
-  // Mark application as hot reloadable. Opposed to hot helper
-
   const hydrate = _routes => {
     ReactDOM.hydrate(
       <HotEnabler>
@@ -57,9 +56,9 @@ console.log('>>>>>>>>>>>>>>>>>>>>>>>> CLIENT.JS > __DEVTOOLS__ !!!!!: ', __DEVTO
     );
   };
 
-  // await Loadable.preloadReady();
+  await Loadable.preloadReady();
 
-  hydrate(routes);
+  await hydrate(routes);
 
   if (module.hot) {
     console.log('>>>>>>>>>>>>>>>>>>> CLIENT.JS > MODULE.HOT! <<<<<<<<<<<<<<<<<');
