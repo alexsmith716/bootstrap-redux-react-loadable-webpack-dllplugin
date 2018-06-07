@@ -88,7 +88,7 @@ const Html = props => {
         {head.script.toComponent()}
 
         {/* (>>>>>>> STYLES - will be physically present only in production with 'WETP' || 'MCEP') */}
-        {Object.keys(assets.styles).length > 0 &&
+        {/* {Object.keys(assets.styles).length > 0 &&
           Object.keys(assets.styles)
             .reverse()
             .map(key => (
@@ -98,7 +98,20 @@ const Html = props => {
                 key={key}
                 href={assets.styles[key]}
               />
-            ))}
+            ))} */}
+
+        {assets.styles &&
+          Object.keys(assets.styles).map(style => (
+            <link
+              href={assets.styles[style]}
+              key={style}
+              media="screen, projection"
+              rel="stylesheet"
+              type="text/css"
+              charSet="UTF-8"
+            />
+          ))}
+
 
       </head>
       <body>
@@ -119,13 +132,16 @@ const Html = props => {
 
         {__DLLS__ && <script key="dlls__vendor" src="/assets/dlls/dll__vendor.js" charSet="UTF-8" />}
 
-        {/*{bundles.map(bundle => bundle && <script src={config.assetsPath + bundle.file} key={bundle.id} />)}*/}
-
         {/* (>>>>>>> JAVASCRIPTS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<) */}
-        {Object.keys(assets.javascript).length > 0 &&
+        {assets.javascript && <script src={assets.javascript.main} charSet="UTF-8" />}
+        {/*  {Object.keys(assets.javascript).length > 0 &&
           Object.keys(assets.javascript)
             .reverse()
-            .map(key => <script key={key} src={assets.javascript[key]}></script>)}
+            .map(key => <script key={key} src={assets.javascript[key]} charSet="UTF-8"></script>)} */}
+
+        {/* http://localhost:3000/assets/2-f56391bd91258e674ac0.chunk.js */}
+
+        {bundles.map(bundle => bundle && <script src={config.assetsPath + bundle.file} key={bundle.id} />)}
 
       </body>
     </html>
@@ -140,12 +156,14 @@ Html.propTypes = {
   content: PropTypes.string,
   store: PropTypes.shape({
     getState: PropTypes.func
-  }).isRequired
+  }).isRequired,
+  bundles: PropTypes.arrayOf(PropTypes.any),
 };
 
 Html.defaultProps = {
   assets: {},
-  content: ''
+  content: '',
+  bundles: [],
 };
 
 export default Html;

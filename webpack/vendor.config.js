@@ -58,11 +58,11 @@ module.exports = {
       // </babel-runtime>
 
       'axios',
-      'bootstrap',
-      'final-form',
       'jquery',
-      'multireducer',
+      'bootstrap',
       'popper.js',
+      'final-form',
+      'multireducer',
       'react',
       'react-dom',
       'react-final-form',

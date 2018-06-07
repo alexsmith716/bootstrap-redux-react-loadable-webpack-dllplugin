@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router';
+// import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import LoginForm from '../../components/LoginForm/LoginForm';
@@ -9,14 +9,12 @@ import * as notifActions from '../../redux/modules/notifs';
 // import GithubLogin from 'components/GithubLogin/GithubLogin';
 import FacebookLogin from '../../components/FacebookLogin/FacebookLogin';
 
-const styles = require('./scss/Login.scss');
+// const styles = require('./scss/Login.scss');
 const googleIcon = require('../../components/GoogleLogin/images/icon-google.png');
 
-// const styles = require('./scss/Login.scss');
 // <p>You are currently logged in as {user.email}.</p>
 
 @connect(state => ({ user: state.auth.user }), { ...notifActions, ...authActions })
-@withRouter
 
 export default class Login extends Component {
 
@@ -25,7 +23,6 @@ export default class Login extends Component {
     login: PropTypes.func.isRequired,
     logout: PropTypes.func.isRequired,
     notifSend: PropTypes.func.isRequired,
-    history: PropTypes.objectOf(PropTypes.any).isRequired
   };
 
   static defaultProps = {
@@ -36,11 +33,11 @@ export default class Login extends Component {
     if (err) return;
 
     try {
-      await this.props.login('facebook', data);
+      await this.props.login(data);
       this.successLogin();
     } catch (error) {
       if (error.message === 'Incomplete oauth registration') {
-        this.props.history.push({
+        this.context.router.push({
           pathname: '/register',
           state: { oauth: error.data }
         });
@@ -66,8 +63,7 @@ export default class Login extends Component {
 
   FacebookLoginButton = ({ facebookLogin }) => (
     <div>
-      <a href="#" className="m-b-10 d-flex justify-content-center align-items-center button-facebook" onClick={facebookLogin}>
-        <i className="fa fa-facebook-official"></i>
+      <a href="#"  onClick={facebookLogin}>
         Facebook
       </a>
     </div>
@@ -80,33 +76,33 @@ export default class Login extends Component {
 
     return (
 
-      <div className="container">
+      <div>
 
-        <div className={styles.loginContainer}>
+        <div>
 
           <Helmet title="Login" />  
 
           {!user && (
 
-            <div className="d-flex justify-content-center">
+            <div>
 
-              <div className={styles.login}>
+              <div>
 
-                <div className={`mb-3 ${styles.formTitle}`}>
+                <div>
                   <p>
                     Sign in to Election App
                   </p>
                 </div>
 
-                <div className={styles.formContainer}>
+                <div>
 
                   <LoginForm onSubmit={this.login} />
 
-                  <div className={`mt-3 mb-3 ${styles.signInWith}`}>
+                  <div>
                     <p>Or sign in with</p>
                   </div>
 
-                  <div className="d-flex justify-content-between">
+                  <div>
 
                     <FacebookLogin
                       appId="35353454535454354"
@@ -117,7 +113,7 @@ export default class Login extends Component {
                     />
 
                     <div>
-                      <a href="#" className="m-b-10 d-flex justify-content-center align-items-center button-google">
+                      <a href="#">
                         <img src={googleIcon} alt="Google Login" />
                         Google
                       </a>
@@ -127,7 +123,7 @@ export default class Login extends Component {
 
                 </div>
 
-                <div className={`mt-4 d-flex justify-content-center ${styles.createAccount}`}>
+                <div>
                   <div>
                     Not a member?
                     <a href="/join?source=login">Create an account</a>.
@@ -147,8 +143,8 @@ export default class Login extends Component {
               <div>You are currently logged in as Elmer Fudddd. Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.</div>
 
               <div>
-                <button className="btn btn-danger" onClick={logout}>
-                  <i className="fa fa-sign-out" /> Log Out
+                <button onClick={logout}>
+                  Log Out
                 </button>
               </div>
             </div>
@@ -156,59 +152,7 @@ export default class Login extends Component {
           )}
 
         </div>
-
       </div>
-
     );
   }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

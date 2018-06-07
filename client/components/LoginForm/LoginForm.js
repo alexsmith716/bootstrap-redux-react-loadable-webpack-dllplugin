@@ -3,13 +3,13 @@ import { Form, Field } from 'react-final-form';
 import PropTypes from 'prop-types';
 import loginValidation from './loginValidation';
 
-const styles = require('./scss/LoginForm.scss');
+//const styles = require('./scss/LoginForm.scss');
 
 const Input = ({
   input, label, type, meta: { touched, error, submitError }, ...rest
 }) => (
 
-  <div className={`form-group ${(error || submitError) && touched ? 'has-error' : ''}`}>
+  <div>
 
     {label === 'Email' && (
 
@@ -18,7 +18,7 @@ const Input = ({
 
     {label === 'Password' && (
 
-      <div className="d-flex justify-content-between">
+      <div>
 
         <label htmlFor={input.name}>
           {label}
@@ -31,15 +31,15 @@ const Input = ({
       </div>
     )}
 
-    <div className={input}>
+    <div>
 
-      <input {...input} {...rest} type={type} className="form-control" />
+      <input {...input} {...rest} type={type} />
 
-      {(error || submitError) && touched && <span className="glyphicon glyphicon-remove form-control-feedback" />}
+      {(error || submitError) && touched && <span />}
 
       {(error || submitError) &&
         touched && (
-        <div className="text-danger">
+        <div>
           <strong>{error || submitError}</strong>
         </div>
       )}
@@ -66,22 +66,22 @@ const LoginForm = ({ onSubmit }) => (
 
       <form onSubmit={handleSubmit}>
 
-        <div className="form-group">
+        <div>
           <Field name="email" type="text" component={Input} label="Email" />
         </div>
 
-        <div className="form-group">
+        <div>
           <Field name="password" type="password" component={Input} label="Password" />
         </div>
 
         {submitError && (
-          <p className="text-danger">
+          <p>
             <strong>{submitError}</strong>
           </p>
         )}
 
-        <div className="d-flex justify-content-center">
-          <a className={`btn btn-success ${styles.signInBtn}`} href="index.html">Sign in</a>
+        <div>
+          <a href="index.html">Sign in</a>
         </div>
 
       </form>

@@ -22,7 +22,7 @@
       .signInWith {
         text-align: center;
         color: #696969;
-        line-height: 2.1;
+        line-height: calculate-rem(50px);;
       }
 
     }
