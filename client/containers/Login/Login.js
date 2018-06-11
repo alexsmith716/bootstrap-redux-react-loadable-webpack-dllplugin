@@ -9,8 +9,8 @@ import * as notifActions from '../../redux/modules/notifs';
 // import GithubLogin from 'components/GithubLogin/GithubLogin';
 import FacebookLogin from '../../components/FacebookLogin/FacebookLogin';
 
-const styles = require('./scss/Login.scss');
-const googleIcon = require('../../components/GoogleLogin/images/icon-google.png');
+//const styles = require('./scss/Login.scss');
+//const googleIcon = require('../../components/GoogleLogin/images/icon-google.png');
 
 // const styles = require('./scss/Login.scss');
 // <p>You are currently logged in as {user.email}.</p>
@@ -77,6 +77,8 @@ export default class Login extends Component {
   render() {
 
     const { user, logout } = this.props;
+    const styles = require('./scss/Login.scss');
+    const googleIcon = require('../../components/GoogleLogin/images/icon-google.png');
 
     return (
 
@@ -128,7 +130,7 @@ export default class Login extends Component {
                 </div>
 
                 <div className={`mt-4 d-flex justify-content-center ${styles.createAccount}`}>
-                  <div>
+                  <div className={styles.testColorFontFoo}>
                     Not a member?
                     <a href="/join?source=login">Create an account</a>.
                   </div>
@@ -162,53 +164,3 @@ export default class Login extends Component {
     );
   }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

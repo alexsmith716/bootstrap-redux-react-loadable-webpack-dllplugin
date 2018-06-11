@@ -36,7 +36,11 @@
       }
     }
   }
+}
 
+.testColorFontFoo {
+  color: #FFC0CB;
+  @include norwester-font;
 }
 
 

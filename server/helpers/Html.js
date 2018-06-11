@@ -49,15 +49,15 @@ const Html = props => {
   // >>>>>> HTML.JS > Object.keys(assets.styles).length:  0
   // >>>>>> HTML.JS > assets.styles:  {}
   // >>>>>> HTML.JS > assets:  { javascript:
-  //    { main: 'http://localhost:3001/assets/main-5d9cc7a91cc4f85e755b.js' },
+  //    { main: 'http://localhost:3001/assets/main.1f75e0e4d28762244834.js' },
   //   styles: {} }
 
   // PRODUCTION -------------------------------------------------------------------------------------------
   // >>>>>> HTML.JS > Object.keys(assets.styles):  [ 'main' ]
   // >>>>>> HTML.JS > Object.keys(assets.styles).length:  1
-  // >>>>>> HTML.JS > assets.styles:  { main: '/assets/main.f96d1142bd7cb4088124.css' }
-  // >>>>>> HTML.JS > assets:  { javascript: { main: '/assets/main-0e4d3c3791dd170d129e.js' },
-  //   styles: { main: '/assets/main.f96d1142bd7cb4088124.css' } }
+  // >>>>>> HTML.JS > assets.styles:  { main: '/assets/main.c247e68a49230868eb80.css' }
+  // >>>>>> HTML.JS > assets:  { javascript: { main: '/assets/main.0e2c37777b0bf217d730.chunk.js' },
+  //   styles: { main: '/assets/main.c247e68a49230868eb80.css' } }
 
 
   return (
@@ -79,16 +79,16 @@ const Html = props => {
         {/* (>>>>>>> TITLE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<) */}
         {head.title.toComponent()}
 
-        {/* (>>>>>>> LINK <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<) */}
+        {/* (>>>>>>> LINKS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<) */}
         {head.link.toComponent()}
         <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="manifest" href="/manifest.json" />
 
-        {/* (>>>>>>> SCRIPT <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<) */}
+        {/* (>>>>>>> SCRIPTS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<) */}
         {head.script.toComponent()}
 
         {/* (>>>>>>> STYLES - will be physically present only in production with 'WETP' || 'MCEP') */}
-        {Object.keys(assets.styles).length > 0 &&
+        {/* {Object.keys(assets.styles).length > 0 &&
           Object.keys(assets.styles)
             .reverse()
             .map(key => (
@@ -98,9 +98,27 @@ const Html = props => {
                 key={key}
                 href={assets.styles[key]}
               />
-            ))}
+            ))} */}
+
+        {assets.styles &&
+          Object.keys(assets.styles).map(style => (
+            <link
+              href={assets.styles[style]}
+              key={style}
+              media="screen, projection"
+              rel="stylesheet"
+              type="text/css"
+              charSet="UTF-8"
+            />
+          ))}
+
+        {/* (will be present only in development mode) */}
+        {assets.styles && Object.keys(assets.styles).length === 0 ? (
+          <style dangerouslySetInnerHTML={{ __html: '#content{display:none}' }} />
+        ) : null}
 
       </head>
+
       <body>
 
         {/* (>>>>>>> CONTENT <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<) */}
@@ -117,15 +135,19 @@ const Html = props => {
         {__DLLS__ === true && console.log(">>>>>>>>>>>>>>> YES __DLLS__ <<<<<<<<<<<<<<<<<<")}
         {__DLLS__ !== true && console.log(">>>>>>>>>>>>>>> NO __DLLS__ <<<<<<<<<<<<<<<<<<")}
 
-        {__DLLS__ && <script key="dlls__vendor" src="/assets/dlls/dll__vendor.js" charSet="UTF-8" />}
-
-        {/*{bundles.map(bundle => bundle && <script src={config.assetsPath + bundle.file} key={bundle.id} />)}*/}
+        {/* {__DLLS__ && <script key="dlls__vendor" src="/assets/dlls/dll__vendor.js" charSet="UTF-8" />} */}
 
         {/* (>>>>>>> JAVASCRIPTS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<) */}
-        {Object.keys(assets.javascript).length > 0 &&
+        {/* {assets.javascript && <script src={assets.javascript.main} charSet="UTF-8" />} */}
+
+        {Object.keys(assets.javascript).length > 0 && 
           Object.keys(assets.javascript)
             .reverse()
-            .map(key => <script key={key} src={assets.javascript[key]}></script>)}
+            .map(key => <script key={key} src={assets.javascript[key]} charSet="UTF-8"></script>)}
+
+        {/* http://localhost:3000/assets/2-f56391bd91258e674ac0.chunk.js */}
+
+        {bundles.map(bundle => bundle && <script src={config.assetsPath + bundle.file} key={bundle.id} />)}
 
       </body>
     </html>
@@ -140,12 +162,14 @@ Html.propTypes = {
   content: PropTypes.string,
   store: PropTypes.shape({
     getState: PropTypes.func
-  }).isRequired
+  }).isRequired,
+  bundles: PropTypes.arrayOf(PropTypes.any),
 };
 
 Html.defaultProps = {
   assets: {},
-  content: ''
+  content: '',
+  bundles: [],
 };
 
 export default Html;

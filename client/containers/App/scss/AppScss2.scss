@@ -25,3 +25,11 @@
 .montserratLightFontGlobalToLocal {
   @include montserratlight-font;
 }
+
+.testColorFont {
+  color: #FFC0CB;
+  @include norwester-font;
+}
+
+
+// pink: FFC0CB

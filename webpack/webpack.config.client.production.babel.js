@@ -15,9 +15,6 @@ const ReactLoadablePlugin = require('react-loadable/webpack').ReactLoadablePlugi
 const settings = require('./universal-webpack-settings');
 const base_configuration = require('./webpack.config');
 
-// With `development: false` all CSS will be extracted into a file
-// named '[name]-[contenthash].css' using `mini-css-extract-plugin`.
-// const configuration = clientConfiguration(base_configuration, settings, { development: false, useMiniCssExtractPlugin: true });
 const configuration = clientConfiguration(base_configuration, settings);
 
 const bundleAnalyzerPath = path.resolve(configuration.context, './build/analyzers/bundleAnalyzer');
@@ -25,19 +22,23 @@ const visualizerPath = path.resolve(configuration.context, './build/analyzers/vi
 const assetsPath = path.resolve(configuration.context, './build/public/assets');
 const serverPath = path.resolve(configuration.context, './build/server');
 
+configuration.mode = 'production';
+
 configuration.devtool = 'source-map';
 // configuration.devtool = 'hidden-source-map';
 
 // configuration.optimization.minimize = true;
 // configuration.optimization.minimizer = [];
 
-configuration.output.filename = '[name]-[chunkhash].js';
-configuration.output.chunkFilename = '[name]-[chunkhash].chunk.js';
-
 configuration.entry.main.push(
   'bootstrap-loader',
   './client/index.entry.js',
 );
+
+configuration.output.filename = '[name]-[chunkhash].js';
+configuration.output.chunkFilename = '[name]-[chunkhash].chunk.js';
+//configuration.output.filename = '[name]-[hash].js';
+//configuration.output.chunkFilename = '[name]-[hash].js';
 
 configuration.module.rules.push(
   {
@@ -50,7 +51,7 @@ configuration.module.rules.push(
           modules: true,
           importLoaders: 2,
           sourceMap: true,
-          localIdentName: '[name]__[local]__[hash:base64:5]',
+          //localIdentName: '[name]__[local]__[hash:base64:5]',
         }
       },
       {
@@ -85,7 +86,7 @@ configuration.module.rules.push(
         loader : 'css-loader',
         options: {
           modules: true,
-          localIdentName: '[name]__[local]__[hash:base64:5]',
+          //localIdentName: '[name]__[local]__[hash:base64:5]',
           importLoaders: 1,
           sourceMap: true
         }
@@ -96,6 +97,19 @@ configuration.module.rules.push(
     ]
   },
 );
+
+configuration.optimization = {
+  splitChunks: {
+    cacheGroups: {
+      styles: {
+        name: 'main',
+        test: /\.(sa|sc|c)ss$/,
+        chunks: 'all',
+        enforce: true
+      }
+    }
+  }
+}
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // PLUGINS +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -117,40 +131,58 @@ configuration.plugins.push(
     __DLLS__: false,
   }),
 
+  // [Hashes] - Enable Long Term Caching
+
+  // [hash]:
+  //    - Returns the build hash. If any portion of the build changes, this changes as well.
+
+  // [chunkhash]:
+  //    - Returns an entry chunk-specific hash. 
+  //    - Each `entry` defined in the configuration receives a hash of its own. 
+  //    - If any portion of the entry changes, the hash will change as well.
+
+  // [contenthash]:
+  //    - Returns a hash specific to content
+  //    - Calculated by extracted content not by full chunk content
+  //    - If you used `chunkhash` for the extracted CSS as well, this would lead to problems ...
+  //    -   ... as the code points to the CSS through JavaScript bringing it to the same entry. 
+  //    - That means if the application code or CSS changed, it would invalidate both.
+  //    - Therefore, instead of `chunkhash`, `contenthash` is generated based on the extracted content
+
   new MiniCssExtractPlugin({
-    filename: '[name].[hash].css',
-    chunkFilename: '[id].[hash].css',
+    //filename: '[name].css',
+    //filename: '[name].[hash].css',
+    //chunkFilename: '[id].[hash].css',
+    filename: '[name]-[contenthash].css',
+    // chunkFilename: '[name]-[contenthash].css',
   }),
 
-  new UglifyJsPlugin({
-    // test: ,  // {RegExp|Array<RegExp>}   /\.js$/i  Test to match files against
-    // include: ,  // {RegExp|Array<RegExp>}  undefined   Files to include
-    // exclude: ,  // {RegExp|Array<RegExp>}  undefined   Files to exclude
-    cache: false,      // Enable file caching (default: false)
-    parallel: true,   // Use multi-process parallel running to improve the build speed (default: false)
-    sourceMap: true, // Use source maps to map error message locations to modules (default: false)
-    extractComments: false, // Whether comments shall be extracted to a separate file (default: false)
-    uglifyOptions: {
-      ecma: 8, // Supported ECMAScript Version (default undefined)
-      warnings: false, // Display Warnings (default false)
-      mangle: true, // Enable Name Mangling (default true)
-      compress: {
-        passes: 2,  // The maximum number of times to run compress (default: 1)
-      },
-      output: {
-        beautify: false, // whether to actually beautify the output (default true)
-        comments: false, // true or "all" to preserve all comments, "some" to preserve some (default false)
-      },
-      ie8: false, // Enable IE8 Support (default false)
-      safari10: false, // Enable work around Safari 10/11 bugs in loop scoping and await (default false)
-    }
-  }),
+  // new UglifyJsPlugin({
+  //   cache: false,      // Enable file caching (default: false)
+  //   parallel: true,   // Use multi-process parallel running to improve the build speed (default: false)
+  //   sourceMap: true, // Use source maps to map error message locations to modules (default: false)
+  //   extractComments: false, // Whether comments shall be extracted to a separate file (default: false)
+  //   uglifyOptions: {
+  //     ecma: 8, // Supported ECMAScript Version (default undefined)
+  //     warnings: false, // Display Warnings (default false)
+  //     mangle: true, // Enable Name Mangling (default true)
+  //     compress: {
+  //       passes: 2,  // The maximum number of times to run compress (default: 1)
+  //     },
+  //     output: {
+  //       beautify: false, // whether to actually beautify the output (default true)
+  //       comments: false, // true or "all" to preserve all comments, "some" to preserve some (default false)
+  //     },
+  //     ie8: false, // Enable IE8 Support (default false)
+  //     safari10: false, // Enable work around Safari 10/11 bugs in loop scoping and await (default false)
+  //   }
+  // }),
 
-  new OptimizeCSSAssetsPlugin({
-    cssProcessor: require('cssnano'), // cssnano >>> default optimize \ minimize css processor 
-    cssProcessorOptions: { discardComments: { removeAll: true } }, // defaults to {}
-    canPrint: true, // indicating if the plugin can print messages to the console (default true)
-  }),
+  // new OptimizeCSSAssetsPlugin({
+  //   cssProcessor: require('cssnano'), // cssnano >>> default optimize \ minimize css processor 
+  //   cssProcessorOptions: { discardComments: { removeAll: true } }, // defaults to {}
+  //   canPrint: true, // indicating if the plugin can print messages to the console (default true)
+  // }),
 
   new ReactLoadablePlugin({
     filename: path.join(configuration.output.path, 'loadable-chunks.json')

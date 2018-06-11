@@ -1,13 +1,16 @@
 const { serverConfiguration } = require('universal-webpack');
 const settings = require('./universal-webpack-settings');
-const base_configuration = require('./webpack.config');
+const configuration = require('./webpack.config');
 const path = require('path');
 
-base_configuration.entry.main.push(
-  './client/index.entry.js',
-);
+// base_configuration.entry.main.push(
+//   './client/index.entry.js',
+// );
 
-base_configuration.module.rules.push(
+configuration.output.filename = '[name].js';
+configuration.output.chunkFilename = '[name].js';
+
+configuration.module.rules.push(
   {
     test: /\.(scss)$/,
     use: [
@@ -20,7 +23,7 @@ base_configuration.module.rules.push(
           modules: true,
           importLoaders: 2,
           sourceMap: true,
-          localIdentName: '[name]__[local]__[hash:base64:5]',
+          //localIdentName: '[name]__[local]__[hash:base64:5]',
         }
       },
       {
@@ -44,7 +47,7 @@ base_configuration.module.rules.push(
         loader: 'sass-resources-loader',
         options: {
           resources: [
-            path.resolve(base_configuration.context, 'client/assets/scss/mixins/mixins.scss')
+            path.resolve(configuration.context, 'client/assets/scss/mixins/mixins.scss')
           ],
         },
       },
@@ -60,7 +63,7 @@ base_configuration.module.rules.push(
         loader : 'css-loader',
         options: {
           modules: true,
-          localIdentName: '[name]__[local]__[hash:base64:5]',
+          //localIdentName: '[name]__[local]__[hash:base64:5]',
           importLoaders: 1,
           sourceMap: true
         }
@@ -73,6 +76,6 @@ base_configuration.module.rules.push(
 
 );
 
-const configurationServer = serverConfiguration(base_configuration, settings);
+const configurationServer = serverConfiguration(configuration, settings);
 
 export default configurationServer;

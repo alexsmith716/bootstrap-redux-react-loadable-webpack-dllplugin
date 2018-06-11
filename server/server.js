@@ -216,7 +216,9 @@ export default function (parameters) {
   //   res.status(200).send('SERVER > Response Ended For Testing!!!!!!! Status 200!!!!!!!!!');
   // });
 
-  // React application rendering
+  // #########################################################################
+  // #########################################################################
+
   app.use(async (req, res) => {
 
     const chunks = parameters.chunks();
@@ -249,14 +251,14 @@ export default function (parameters) {
 
     console.log('>>>>>>>>>>>>>>>> SERVER > APP.USE > ASYNC !! > SetUpComponent !! END !! $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
 
-    function hydrate() {
-      res.write('<!doctype html>');
-      ReactDOM.renderToNodeStream(<Html assets={chunks} store={store} />).pipe(res);
-    }
+    // function hydrate() {
+    //   res.write('<!doctype html>');
+    //   ReactDOM.renderToNodeStream(<Html assets={chunks} store={store} />).pipe(res);
+    // }
 
-    if (__DISABLE_SSR__) {
-      return hydrate();
-    }
+    // if (__DISABLE_SSR__) {
+    //   return hydrate();
+    // }
 
     try {
       console.log('>>>>>>>>>>>>>>>>> SERVER > $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ loadOnServer START $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
@@ -287,7 +289,10 @@ export default function (parameters) {
       const bundles = getBundles(getChunks(), modules);
       // const bundles = getBundles(chunksPath, modules);
 
+      console.log('>>>>>>>>>>>>>>>> SERVER > APP.USE > ASYNC !! > chunks: ', chunks);
       console.log('>>>>>>>>>>>>>>>> SERVER > APP.USE > ASYNC !! > bundles: ', bundles);
+      console.log('>>>>>>>>>>>>>>>> SERVER > APP.USE > ASYNC !! > content: ', content);
+      console.log('>>>>>>>>>>>>>>>> SERVER > APP.USE > ASYNC !! > store: ', store);
 
       const html = <Html assets={chunks} bundles={bundles} content={content} store={store} />;
 

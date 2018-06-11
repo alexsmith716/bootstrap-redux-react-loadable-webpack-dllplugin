@@ -2,10 +2,6 @@ var path = require('path');
 var webpack = require('webpack');
 var projectRootPath = path.resolve(__dirname, '../');
 
-  // 'expose-loader?$!jquery',
-  // 'expose-loader?jQuery!jquery',
-  // 'expose-loader?Popper!popper.js',
-
 module.exports = {
   mode: 'development',
   devtool: 'inline-source-map',
@@ -61,12 +57,12 @@ module.exports = {
       'babel-runtime/regenerator/index',
       // </babel-runtime>
 
-      'jquery',
-      'popper.js',
-      'bootstrap',
       'axios',
+      'bootstrap',
       'final-form',
+      'jquery',
       'multireducer',
+      'popper.js',
       'react',
       'react-dom',
       'react-final-form',
